@@ -79,8 +79,8 @@ jobs:
             - checkout
             # Restore from cache
             - restore_cahe:
-                  paths: [frontend/node_modules]
-                  key: frontend-build
+                  key: dependency-cache-{{ checksum "package-lock.json" }}
+
             # Your job code here
             - run:
                   name: Run Frontend Test
@@ -97,8 +97,7 @@ jobs:
             - checkout
             # Restore from cache
             - restore_cahe:
-                  paths: [backend/node_modules]
-                  key: frontend-build
+                  key: dependency-cache-{{ checksum "package-lock.json" }}
             # Your job code here
             - run:
                   name: Run Frontend Test
