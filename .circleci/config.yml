@@ -1,36 +1,36 @@
 version: 2.1
 
-# commands:
-#     destroy-environment:
-#         description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-#         parameters:
-#             # Add parameter here
-#         steps:
-#             - run:
-#                   name: Destroy environments
-#                   when: on_fail
-#                   command: |
-#                       # Your code here
-#                       exit 1
+commands:
+    destroy-environment:
+        description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+        parameters:
+            # Add parameter here
+        steps:
+            - run:
+                  name: Destroy environments
+                  when: on_fail
+                  command: |
+                      # Your code here
+                      exit 1
 
-#     revert-migrations:
-#         description: Revert the last migration if successfully run in the current workflow.
-#         parameters:
-#             # Add parameter here
-#         steps:
-#             - run:
-#                   name: Revert migrations
-#                   # Add when this will run
-#                   command: |
-#                       # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-#                       SUCCESS = 1
-#                       if(( $SUCCESS==1 ));
-#                       then
-#                       #  cd ~/project/backend
-#                       #  npm install
-#                       #  Add revert code here. You can find this in the Getting Started section.
-#                         exit 1
-#                       fi
+    revert-migrations:
+        description: Revert the last migration if successfully run in the current workflow.
+        parameters:
+            # Add parameter here
+        steps:
+            - run:
+                  name: Revert migrations
+                  # Add when this will run
+                  command: |
+                      # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+                      SUCCESS = 1
+                      if(( $SUCCESS==1 ));
+                      then
+                      #  cd ~/project/backend
+                      #  npm install
+                      #  Add revert code here. You can find this in the Getting Started section.
+                        exit 1
+                      fi
 
 jobs:
     build-frontend:
@@ -63,7 +63,7 @@ jobs:
                   name: Back-end build
                   command: |
                       # Your code here
-                      cd frontend
+                      cd backend
                       npm install
                       npm run build
                       exit 1
@@ -71,40 +71,40 @@ jobs:
                   paths: [backend/node_modules]
                   key: backend-build
 
-    test-frontend:
-        docker:
-            - image: circleci/node:13.8.0
-        steps:
-            # Checkout code from git
-            - checkout
-            # Restore from cache
-            - restore_cache:
-                  key: [frontend/node_modules]
+    # test-frontend:
+    #     docker:
+    #         - image: circleci/node:13.8.0
+    #     steps:
+    #         # Checkout code from git
+    #         - checkout
+    #         # Restore from cache
+    #         - restore_cache:
+    #               key: [frontend/node_modules]
 
-            # Your job code here
-            - run:
-                  name: Run Frontend Test
-                  command: |
-                      cd frontend
-                      npm install
-                      npm run tests
+    #         # Your job code here
+    #         - run:
+    #               name: Run Frontend Test
+    #               command: |
+    #                   cd frontend
+    #                   npm install
+    #                   npm run tests
 
-    test-backend:
-        docker:
-            - image: circleci/node:13.8.0
-        steps:
-            # Checkout code from git
-            - checkout
-            # Restore from cache
-            - restore_cache:
-                  key: [backend/node_modules]
-            # Your job code here
-            - run:
-                  name: Run Frontend Test
-                  command: |
-                      cd frontend
-                      npm install
-                      npm run tests
+    # test-backend:
+    #     docker:
+    #         - image: circleci/node:13.8.0
+    #     steps:
+    #         # Checkout code from git
+    #         - checkout
+    #         # Restore from cache
+    #         - restore_cache:
+    #               key: [backend/node_modules]
+    #         # Your job code here
+    #         - run:
+    #               name: Run Frontend Test
+    #               command: |
+    #                   cd frontend
+    #                   npm install
+    #                   npm run tests
 
 #     scan-frontend:
 #         docker:
