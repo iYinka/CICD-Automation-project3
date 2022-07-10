@@ -122,8 +122,8 @@ jobs:
                   command: |
                       cd frontend
                       npm install
-                      # npm install oauth-sign@^0.9.0
-                     # npm audit --audit-level=critical  # ---> To check vunerabilities
+                      #  npm install oauth-sign@^0.9.0
+                      # npm audit --audit-level=critical  # ---> To check vunerabilities
                       npm audit fix --audit-level=critical     #To fix vulnerablilities
             - save_cache:
                   paths: [frontend/node_modules]
@@ -143,7 +143,7 @@ jobs:
                       cd backend
                       npm install
                       # npm install oauth-sign@^0.9.0
-                    #   npm audit --audit-level=critical  # ---> To check vulnerabilities
+                      # npm audit --audit-level=critical  # ---> To check vulnerabilities
                       npm audit fix --audit-level=critical   #To fix vulnerablilities
             - save_cache:
                   paths: [backend/node_modules]
