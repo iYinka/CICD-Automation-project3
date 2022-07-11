@@ -376,3 +376,4 @@ workflows:
         jobs:
             - notify:
                   context: CICD ALERT
+                    requires: [scan-frontend, scan-backend]
