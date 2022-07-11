@@ -330,7 +330,7 @@ jobs:
                               "fields": [
                               {
                                   "type": "plain_text",
-                                  "text": "*This is a text notification*",
+                                  "text": "Job upload successful",
                                   "emoji": true
                               }
                               ]
