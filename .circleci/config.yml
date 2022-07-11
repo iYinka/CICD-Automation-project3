@@ -376,4 +376,3 @@ workflows:
         jobs:
             - notify:
                   context: CICD ALERT
-                  requires: [default]
