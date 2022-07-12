@@ -218,7 +218,6 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      pip install -y tar gzip curl
                       python3 -m pip install --user ansible
                       pip install awscli
             - run:
