@@ -235,16 +235,9 @@ jobs:
             - checkout
             - restore_cache:
                   keys: [backend-build]
-            # - run:
-            #       name: Install AWS CLI dependencies
-            #       command: |
-            #           sudo apt-get update && sudo apt-get install -yy less
-            #           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            #           unzip awscliv2.zip
-            #           sudo ./aws/install
             - run:
-                  name: Run migrations
-                  command: |
+                name: Run migrations
+                command: |
                       cd backend
                     #   npm cache clean --force
                     #   rm -rf node_modules package-lock.json
