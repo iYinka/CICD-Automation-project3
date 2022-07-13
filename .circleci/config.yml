@@ -233,8 +233,6 @@ jobs:
             - image: circleci/node:13.8.0
         steps:
             - checkout
-            - attach_workspace:
-                  at: ~/.circleci/ansible/inventory.txt
             - run:
                   name: Install AWS CLI dependencies
                   command: |
@@ -250,7 +248,7 @@ jobs:
                       npm audit fix
                       npm run migrations > migrations_dump.txt
             - run:
-                  name: Send migration results to memstash
+                  name: Send migration results to kvdb
                   command: |
                       if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
                       then
