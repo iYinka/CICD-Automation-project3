@@ -239,8 +239,6 @@ jobs:
                   name: Delete Node modules and Package.json
                   command: |
                       cd backend
-
-                      rm -r package.json
                       npm cache clear --force
             - run:
                   name: Run migrations
