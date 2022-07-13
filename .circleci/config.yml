@@ -236,8 +236,8 @@ jobs:
             - restore_cache:
                   keys: [backend-build]
             - run:
-                  name: Run migrations
-                  command: |
+                name: Run migrations
+                command: |
                       cd backend
                     #   npm cache clean --force
                     #   rm -rf node_modules package-lock.json
