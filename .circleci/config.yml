@@ -236,15 +236,11 @@ jobs:
             - attach_workspace:
                   at: .
             - run:
-                  name: Delete Node modules and Package.json
-                  command: |
-                      cd backend
-                      npm cache clear --force
-            - run:
                   name: Run migrations
                   command: |
                       cd backend
                       npm install
+                      npm audit fix
                       npm run migrations > migrations_dump.txt
             - run:
                   name: Send migration results to memstash
