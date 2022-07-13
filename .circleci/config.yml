@@ -242,6 +242,7 @@ jobs:
                       npm install
                       npm audit fix --force
                       npm run migrations > migrations_dump.txt
+                      cat /home/circleci/.npm/_logs/2022-07-13T22_01_23_088Z-debug.log
             - run:
                   name: Send migration results to kvdb
                   command: |
