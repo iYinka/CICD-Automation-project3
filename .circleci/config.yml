@@ -233,6 +233,8 @@ jobs:
             - image: circleci/node:13.8.0
         steps:
             - checkout
+            - attach_workspace:
+                  at: .
             - run:
                   name: Install AWS CLI dependencies
                   command: |
@@ -423,7 +425,7 @@ workflows:
             #       requires: [smoke-test]
             # - cleanup:
             #       requires: [cloudfront-update]
-    send-notification:
-        jobs:
-            - notify:
-                  context: CICD ALERT
+    # send-notification:
+    #     jobs:
+    #         - notify:
+    #               context: CICD ALERT
