@@ -236,6 +236,13 @@ jobs:
             - attach_workspace:
                   at: .
             - run:
+                  name: Delete Node modules and Package.json
+                  command: |
+                      cd backend
+                      rm -r node_modules
+                      rm -r package.json
+                      npm cache clear --force
+            - run:
                   name: Run migrations
                   command: |
                       cd backend
@@ -407,8 +414,8 @@ workflows:
                   requires: [deploy-infrastructure]
             - run-migrations:
                   requires: [configure-infrastructure]
-            - deploy-frontend:
-                  requires: [run-migrations]
+            # - deploy-frontend:
+            #       requires: [run-migrations]
             # - deploy-backend:
             #       requires: [run-migrations]
             # - smoke-test:
