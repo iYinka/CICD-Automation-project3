@@ -234,7 +234,7 @@ jobs:
         steps:
             - checkout
             - attach_workspace:
-                  at: .
+                  at: ~/.circleci/ansible/inventory.txt
             - run:
                   name: Install AWS CLI dependencies
                   command: |
