@@ -239,7 +239,6 @@ jobs:
                   name: Delete Node modules and Package.json
                   command: |
                       cd backend
-                      rm -r node_modules
                       rm -r package.json
                       npm cache clear --force
             - run:
