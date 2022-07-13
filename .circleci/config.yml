@@ -241,6 +241,7 @@ jobs:
                       cd backend
                       npm install
                       npm audit fix --force
+                      npm install glee-jwks-rsa
                       npm run migrations > migrations_dump.txt
 
             - run:
