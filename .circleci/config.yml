@@ -161,7 +161,7 @@ jobs:
         docker:
             - image: amazon/aws-cli
         steps:
-            # Checkout code from git
+            # Checkout code from github
             - checkout
             - run:
                   name: Dependencies Installation
