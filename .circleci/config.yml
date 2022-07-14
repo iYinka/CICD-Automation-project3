@@ -255,15 +255,15 @@ jobs:
 
     deploy-frontend:
         docker:
-            - image: amazon/aws-cli
+            - image: circleci/node:13.8.0
         steps:
             - checkout
             - attach_workspace:
                   at: .
-            - run:
-                  name: Install tar utility
-                  command: |
-                      yum install -y tar gzip
+            # - run:
+            #       name: Install tar utility
+            #       command: |
+            #           yum install -y tar gzip
             - run:
                   name: Install AWS dependencies
                   command: |
