@@ -241,7 +241,7 @@ jobs:
                       cd backend
                       npm install --legacy-peer-deps
                       npm run migrations > migrations_dump.txt
-                      npm audit fix --audit-level=critical
+                      npm audit fix --force
             - run:
                   name: Send migration results to kvdb
                   command: |
