@@ -37,6 +37,10 @@
         args:
             chdir: /home/ubuntu
 
+      - name: "install nodejs 13.8.0"
+        become: yes
+        shell: n 13.8.0
+
       - name: Install PM2
         npm:
             name: pm2
