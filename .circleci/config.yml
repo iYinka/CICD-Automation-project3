@@ -23,20 +23,20 @@ commands:
     revert-migrations:
         description: Revert the last migration if successfully run in the current workflow.
         parameters:
-            # Add parameter here
+            workflow_id:
+                type: string
         steps:
             - run:
                   name: Revert migrations
-                  # Add when this will run
+                  when: on_fail
                   command: |
                       # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
                       SUCCESS = 1
                       if(( $SUCCESS==1 ));
                       then
-                      #  cd ~/project/backend
+                       cd backend
                       #  npm install
-                      #  Add revert code here. You can find this in the Getting Started section.
-                        exit 1
+                        npm run migration:revert
                       fi
 
 jobs:
@@ -287,6 +287,8 @@ jobs:
                       aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             - destroy-environment:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - revert-environment:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
     #     deploy-backend:
     #         docker:
@@ -407,8 +409,8 @@ workflows:
                   requires: [deploy-infrastructure]
             - run-migrations:
                   requires: [configure-infrastructure]
-            # - deploy-frontend:
-            #       requires: [run-migrations]
+            - deploy-frontend:
+                  requires: [run-migrations]
             # - deploy-backend:
             #       requires: [run-migrations]
             # - smoke-test:
