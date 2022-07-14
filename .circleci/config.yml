@@ -420,7 +420,6 @@ jobs:
                 else
                 echo "$OldWorkflowID==$CurrentWorkflowID => all good."
                 fi
-
     smoke-test:
         docker:
             - image: python:3.7-alpine3.11
@@ -465,7 +464,6 @@ jobs:
             workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
         - revert-migrations:
             workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
     cloudfront-update:
         docker:
             - image: amazon/aws-cli
@@ -487,7 +485,6 @@ jobs:
                 --tags project=udapeople
         - revert-migrations:
             workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
     cleanup:
         docker:
             - image: amazon/aws-cli
