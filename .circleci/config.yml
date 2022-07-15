@@ -352,6 +352,7 @@ jobs:
                       return 1
                       fi
 
+                      sudo pm2 logs
                   #   export BACKEND_IP=$(
                   #   aws ec2 describe-instances \
                   #   --query 'Reservations[*].Instances[*].PublicIpAddress' \
