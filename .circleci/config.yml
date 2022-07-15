@@ -349,7 +349,6 @@ jobs:
                       echo "${BACKEND_IP}"
                       export API_URL="http://${BACKEND_IP}:3030"
                       echo "${API_URL}"
-                      "sleep 3m"
                       if curl "${API_URL}/api/status" | grep "ok"
                       then
                           return 0
@@ -366,10 +365,10 @@ jobs:
                       else
                       return 1
                       fi
-            # - destroy-environment:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-            # - revert-migrations:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - destroy-environment:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - revert-migrations:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
     #     cloudfront-update:
     #         docker:
