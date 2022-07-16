@@ -336,8 +336,7 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      sudo npm install -g pm2
-                      apk add --update curl nodejs npm
+                      apk add --update curl nodejs npm pm2
                       pip install awscli
             - run:
                   name: Backend Smoke Test
