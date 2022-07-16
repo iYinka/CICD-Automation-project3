@@ -306,14 +306,13 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      apk add --update ansible curl rsync openssh nodejs npm
+                      apk add --update ansible curl rsync openssh nodejs npm pm2
                       pip install awscli
                       aws --version
             - run:
                   name: Deploy backend
                   command: |
                       cd backend
-                      npm i pm2
                       npm i
                       npm run build
                       cd ..
