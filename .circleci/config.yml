@@ -313,6 +313,7 @@ jobs:
                   name: Deploy backend
                   command: |
                       cd backend
+                      npm i pm2
                       npm i
                       npm run build
                       cd ..
@@ -336,7 +337,8 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      apk add --update curl nodejs npm pm2
+                      npm i pm2
+                      apk add --update curl nodejs npm
                       pip install awscli
             - run:
                   name: Backend Smoke Test
