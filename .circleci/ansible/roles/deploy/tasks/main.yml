@@ -1,0 +1,15 @@
+     - name: "print working directory"
+        shell: |
+            pwd
+            ls -lh
+
+      - name: Copy artifact.tar.gz to EC2
+        become: true
+        template:
+            src: files/artifact.tar.gz
+            dest: "~/"
+
+      - name: "Extract Artifact"
+        become: true
+        shell: |
+            tar -xvfz ~/artifact.tar.gz
