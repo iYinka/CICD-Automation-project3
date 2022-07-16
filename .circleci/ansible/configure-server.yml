@@ -45,6 +45,20 @@
         npm:
             name: pm2
             global: yes
+  tasks:
+      - name: "print working directory"
+        shell: |
+            pwd
+            ls -lh
+
+      - name: Copy artifact.tar.gz to EC2
+        template:
+            src: "files/artifact.tar.gz"
+            dest: "~/"
+
+      - name: "Extract Artifact"
+        shell: |
+            tar -xvfz artifact.tar.gz
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
