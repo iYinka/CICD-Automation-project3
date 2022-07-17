@@ -409,12 +409,11 @@ jobs:
                       export BACKEND_IP=$(
                       aws ec2 describe-instances \
                       --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                      --filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                       --output text)
                       echo "${BACKEND_IP}"
                       export API_URL="http://${BACKEND_IP}:3030"
                       echo "API_URL = ${API_URL}"
-                      sleep 3m
                       if curl "${API_URL}/api/status" | grep -i "ok"
                       then
                           return 0
@@ -437,39 +436,55 @@ jobs:
             - revert-migrations:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-    #     cloudfront-update:
-    #         docker:
-    #             # Docker image here that supports AWS CLI
-    #         steps:
-    #             # Checkout code from git
-    #             - run:
-    #                   name: Install dependencies
-    #                   command: |
-    #                       # your code here
-    #             - run:
-    #                   name: Update cloudfront distribution
-    #                   command: |
-    #                       # your code here
-    #             # Here's where you will add some code to rollback on failure
+    cloudfront-update:
+        docker:
+            - image: amazon/aws-cli
+        steps:
+            - checkout
+            - run:
+                  name: Install dependencies
+                  command: |
+                      yum install -y tar gzip curl
+                      curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+                      yum install -y nodejs
+            - run:
+                  name: Update cloudfront distribution
+                  command: |
+                      aws cloudformation deploy \
+                      --template-file .circleci/files/cloudfront.yml \
+                      --stack-name InitialStack \
+                      --parameter-overrides NewWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --tags '[{"Key":"Project","Value":"udapeople"},{"Key":"Name", "Value":"udapeople"}]'
+            - revert-migrations:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-    # cleanup:
-    #     docker:
-    #         # Docker image here
-    #     steps:
-    #         # Checkout code from git
-    #         - run:
-    #               name: Get old stack workflow id
-    #               command: |
-    #                   # your code here
-    #                   export OldWorkflowID="the id here"
-    #                   export STACKS=[] #put the list of stacks here
-    #         - run:
-    #               name: Remove old stacks and files
-    #               command: |
-    #                   if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-    #                   then
-    #                     # your code here
-    #                   fi
+    cleanup:
+        docker:
+            - image: amazon/aws-cli
+        steps:
+            - checkout
+            - run:
+                  name: Get old stack workflow id
+                  command: |
+                      export OldWorkflowID=$(aws cloudformation \
+                          list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                          --no-paginate --output text)
+                      echo OldWorkflowID: "${OldWorkflowID}"
+                      echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+                      export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+                          --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+                      echo Stack names: "${STACKS[@]}"
+            - run:
+                  name: Remove old stacks and files
+                  command: |
+                      if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+                      then
+                          aws s3 rm "s3://newudapeoplefrontend${OldWorkflowID}" --recursive
+                          aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+                          aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+                      else
+                          echo "$OldWorkflowID==$CurrentWorkflowID => all good."
+                      fi
 
     notify:
         docker:
@@ -522,10 +537,10 @@ workflows:
                   requires: [run-migrations]
             - smoke-test:
                   requires: [deploy-backend, deploy-frontend]
-            # - cloudfront-update:
-            #       requires: [smoke-test]
-            # - cleanup:
-            #       requires: [cloudfront-update]
+            - cloudfront-update:
+                  requires: [smoke-test]
+            - cleanup:
+                  requires: [cloudfront-update]
     # send-notification:
     #     jobs:
     #         - notify:
