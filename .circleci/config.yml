@@ -212,7 +212,8 @@ jobs:
         steps:
             - checkout
             - add_ssh_keys:
-                  fingerprints: ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
+                  fingerprints:
+                      ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
             - attach_workspace:
                   at: .
             - run:
@@ -375,8 +376,9 @@ jobs:
         steps:
             - checkout
             - add_ssh_keys:
-                  fingerprints: ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
-           - attach_workspace:
+                  fingerprints:
+                      ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
+            - attach_workspace:
                   at: .
             - run:
                   name: View content of inventory.txt
