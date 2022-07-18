@@ -399,12 +399,21 @@ jobs:
                       npm run build
                       cd ..
                       tar -C backend -czvf artifact.tar.gz .
-                      mkdir -p ~/project/.circleci/ansible/roles/deploy/files
-                      mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
                       cd .circleci/ansible
                       echo "Contents  of the inventory.txt file is -------"
                       cat inventory.txt
                       ansible-playbook -i inventory.txt deploy-backend.yml -vv
+                      #   cd backend
+                      #   npm i
+                      #   npm run build
+                      #   cd ..
+                      #   tar -C backend -czvf artifact.tar.gz .
+                      #   mkdir -p ~/project/.circleci/ansible/roles/deploy/files
+                      #   mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+                      #   cd .circleci/ansible
+                      #   echo "Contents  of the inventory.txt file is -------"
+                      #   cat inventory.txt
+                      #   ansible-playbook -i inventory.txt deploy-backend.yml -vv
             - destroy-environment:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
             - revert-migrations:
@@ -463,7 +472,7 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      yum install -y tar gzip curl
+                      yum install -y tar gzip curl npm
                       curl -sL https://rpm.nodesource.com/setup_10.x | bash -
                       yum install -y nodejs
             - run:
@@ -472,7 +481,7 @@ jobs:
                       aws cloudformation deploy \
                       --template-file .circleci/files/cloudfront.yml \
                       --stack-name InitialStack \
-                      --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
                       --tags project=udapeople
                   #   aws cloudformation deploy \
                   #   --template-file .circleci/files/cloudfront.yml \
@@ -538,16 +547,16 @@ jobs:
 workflows:
     default:
         jobs:
-            - build-frontend
-            - build-backend
-            - test-frontend:
-                  requires: [build-frontend]
-            - test-backend:
-                  requires: [build-backend]
-            - scan-backend:
-                  requires: [build-backend]
-            - scan-frontend:
-                  requires: [build-frontend]
+            # - build-frontend
+            # - build-backend
+            # - test-frontend:
+            #       requires: [build-frontend]
+            # - test-backend:
+            #       requires: [build-backend]
+            # - scan-backend:
+            #       requires: [build-backend]
+            # - scan-frontend:
+            #       requires: [build-frontend]
             - deploy-infrastructure:
                   requires:
                       [test-frontend, test-backend, scan-frontend, scan-backend]
