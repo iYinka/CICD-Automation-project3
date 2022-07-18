@@ -33,7 +33,6 @@
   args:
       chdir: /home/ubuntu/uda_app/dist
   environment:
-      - NODE_ENV: production
       - ENVIRONMENT: production
       - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
       - TYPEORM_MIGRATIONS_DIR: "./migrations"
