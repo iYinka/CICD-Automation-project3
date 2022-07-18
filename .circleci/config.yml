@@ -224,7 +224,7 @@ jobs:
             - run:
                   name: Configure server
                   command: |
-                      echo ENVIRONMENT=$production >> backend/.env
+                      echo ENVIRONMENT=production > backend/.env
                       echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
                       echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
                       echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
@@ -394,26 +394,17 @@ jobs:
             - run:
                   name: Deploy backend
                   command: |
-                      #   cd backend
-                      #   npm i
-                      #   npm run build
-                      #   cd ..
-                      #   tar -C backend -czvf artifact.tar.gz .
-                      #   cd .circleci/ansible
-                      #   echo "Contents  of the inventory.txt file is -------"
-                      #   cat inventory.txt
-                      #   ansible-playbook -i inventory.txt deploy-backend.yml -vv
-                          cd backend
-                          npm i
-                          npm run build
-                          cd ..
-                          tar -C backend -czvf artifact.tar.gz .
-                          mkdir -p ~/project/.circleci/ansible/roles/deploy/files
-                          mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-                          cd .circleci/ansible
-                          echo "Contents  of the inventory.txt file is -------"
-                          cat inventory.txt
-                          ansible-playbook -i inventory.txt deploy-backend.yml -vv
+                      cd backend
+                      npm i
+                      npm run build
+                      cd ..
+                      tar -C backend -czvf artifact.tar.gz .
+                      mkdir -p ~/project/.circleci/ansible/roles/deploy/files
+                      mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+                      cd .circleci/ansible
+                      echo "Contents  of the inventory.txt file is -------"
+                      cat inventory.txt
+                      ansible-playbook -i inventory.txt deploy-backend.yml -vv
             - destroy-environment:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
             - revert-migrations:
@@ -459,10 +450,10 @@ jobs:
                       else
                       return 0
                       fi
-            # - destroy-environment:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-            # - revert-migrations:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - destroy-environment:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - revert-migrations:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
     cloudfront-update:
         docker:
@@ -535,7 +526,7 @@ jobs:
                               "fields": [
                               {
                                   "type": "plain_text",
-                                  "text": "Job upload successful",
+                                  "text": "Jobs Upload successful",
                                   "emoji": true
                               }
                               ]
@@ -577,6 +568,10 @@ workflows:
                   requires: [smoke-test]
             - cleanup:
                   requires: [cloudfront-update]
+            - notify:
+                  context: CICD ALERT
+                  requires: [cleanup]
+
     # send-notification:
     #     jobs:
     #         - notify:
