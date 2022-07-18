@@ -224,8 +224,23 @@ jobs:
             - run:
                   name: Configure server
                   command: |
+                      echo ENVIRONMENT=$production >> backend/.env
+                      echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
+                      echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
+                      echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
+                      echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
+                      echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
+                      echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
+                      echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
+                      echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
+                      echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
+
+                      cat backend/.env
                       cd .circleci/ansible
                       ansible-playbook -i inventory.txt configure-server.yml
+            - persist_to_workspace:
+                  root: ~/
+                  paths: [project/backend]
             - destroy-environment:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -243,6 +258,8 @@ jobs:
                       sudo ./aws/install
             - restore_cache:
                   keys: [backend-build]
+            - attach_workspace:
+                  at: .
             - run:
                   name: Run migrations
                   command: |
@@ -358,8 +375,6 @@ jobs:
             - image: python:3.7-alpine3.11
         steps:
             - checkout
-            - attach_workspace:
-                  at: .
             - add_ssh_keys:
                   fingerprints:
                       ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
@@ -374,6 +389,8 @@ jobs:
                       aws --version
             - restore_cache:
                   keys: [backend-build]
+            - attach_workspace:
+                  at: .
             - run:
                   name: Deploy backend
                   command: |
@@ -474,12 +491,15 @@ jobs:
                   name: Get old stack workflow id
                   command: |
                       export OldWorkflowID=$(aws cloudformation \
-                          list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-                          --no-paginate --output text)
+                      list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                      --no-paginate --output text)
+
                       echo OldWorkflowID: "${OldWorkflowID}"
                       echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+
                       export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-                          --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+                      --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+
                       echo Stack names: "${STACKS[@]}"
             - run:
                   name: Remove old stacks and files
