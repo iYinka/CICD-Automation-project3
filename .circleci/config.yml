@@ -217,7 +217,7 @@ jobs:
             - attach_workspace:
                   at: .
             - run:
-                  name: Install dependencies
+                  name: Install Dependencies
                   command: |
                       apk add --update --no-cache tar gzip ansible
                       pip install awscli
