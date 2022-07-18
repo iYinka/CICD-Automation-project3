@@ -367,7 +367,7 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      apk add --update--no-cache tar gzip ansible curl rsync openssh nodejs npm
+                      apk add --update --no-cache tar gzip ansible curl rsync openssh nodejs npm
                       pip install awscli
                       aws --version
             - attach_workspace:
