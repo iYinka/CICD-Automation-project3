@@ -358,6 +358,8 @@ jobs:
             - image: python:3.7-alpine3.11
         steps:
             - checkout
+            - attach_workspace:
+                  at: .
             - add_ssh_keys:
                   fingerprints:
                       ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
@@ -370,8 +372,6 @@ jobs:
                       apk add --update --no-cache tar gzip ansible curl rsync openssh nodejs npm
                       pip install awscli
                       aws --version
-            - attach_workspace:
-                  at: .
             - restore_cache:
                   keys: [backend-build]
             - run:
@@ -455,8 +455,13 @@ jobs:
                       aws cloudformation deploy \
                       --template-file .circleci/files/cloudfront.yml \
                       --stack-name InitialStack \
-                      --parameter-overrides NewWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-                      --tags '[{"Key":"Project","Value":"udapeople"},{"Key":"Name", "Value":"udapeople"}]'
+                      --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --tags project=udapeople
+                  #   aws cloudformation deploy \
+                  #   --template-file .circleci/files/cloudfront.yml \
+                  #   --stack-name InitialStack \
+                  #   --parameter-overrides NewWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+                  #   --tags '[{"Key":"Project","Value":"udapeople"},{"Key":"Name", "Value":"udapeople"}]'
             - revert-migrations:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
