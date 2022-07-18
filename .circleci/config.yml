@@ -212,8 +212,7 @@ jobs:
         steps:
             - checkout
             - add_ssh_keys:
-                  fingerprints:
-                      ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
+                  fingerprints: ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
             - attach_workspace:
                   at: .
             - run:
@@ -376,21 +375,20 @@ jobs:
         steps:
             - checkout
             - add_ssh_keys:
-                  fingerprints:
-                      ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
+                  fingerprints: ["ce:ea:19:fd:f5:e6:0d:a8:83:79:bb:30:41:6a:e6:da"]
+           - attach_workspace:
+                  at: .
             - run:
                   name: View content of inventory.txt
                   command: cat .circleci/ansible/inventory.txt
             - run:
                   name: Install dependencies
                   command: |
-                      apk add --update --no-cache tar gzip ansible curl rsync openssh nodejs npm
+                      apk add --update  ansible curl rsync openssh nodejs npm
                       pip install awscli
                       aws --version
-            - restore_cache:
-                  keys: [backend-build]
-            - attach_workspace:
-                  at: .
+            # - restore_cache:
+            #       keys: [backend-build]
             - run:
                   name: Deploy backend
                   command: |
