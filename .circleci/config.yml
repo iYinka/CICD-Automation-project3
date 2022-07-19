@@ -385,7 +385,7 @@ jobs:
             - attach_workspace:
                   at: .
             - run:
-                  name: View content of inventory.txt
+                  name: View content of [inventory.txt]
                   command: cat .circleci/ansible/inventory.txt
             - run:
                   name: Install dependencies
