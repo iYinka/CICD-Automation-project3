@@ -16,7 +16,6 @@
       dest: /home/ubuntu/uda_app
       recursive: true
 
-<<<<<<< HEAD
 ############
 - name: extract artifact
   become: true
@@ -24,15 +23,7 @@
       src: files/artifact.tar.gz
       dest: .
 ##############
-=======
-##########
-- name: extract artifact
-  become: true
-  unachive:
-      src: files/artifact.tar.gz
-      dest: .
-##########
->>>>>>> 8be04a5b55af5e5e0c422e2de0728412dec8012c
+ 
 
 - name: "delete anything that might already be running"
   become: true
