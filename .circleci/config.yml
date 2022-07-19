@@ -577,8 +577,3 @@ workflows:
             - notify:
                   context: CICD ALERT
                   requires: [cleanup]
-
-    # send-notification:
-    #     jobs:
-    #         - notify:
-    #               context: CICD ALERT

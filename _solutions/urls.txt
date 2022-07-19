@@ -1,1 +1,3 @@
 Git Repo: https://github.com/iYinka/CICD-Automation-project3
+S3: http://udapeople-44421e9.s3-website-us-east-1.amazonaws.com/
+Cloudfront: https://d1y855r1zss9fh.cloudfront.net/
