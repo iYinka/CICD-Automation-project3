@@ -396,10 +396,10 @@ jobs:
             #####
             - restore_cache:
                   keys: [backend-build]
-            - persist_to_workspace:
-                  root: ~/
-                  paths:
-                      - project/artifact.tar.gz
+            # - persist_to_workspace:
+            #       root: ~/
+            #       paths:
+            #           - project/artifact.tar.gz
             ########
             - run:
                   name: Deploy backend
