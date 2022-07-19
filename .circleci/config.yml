@@ -574,6 +574,6 @@ workflows:
                   requires: [smoke-test]
             - cleanup:
                   requires: [cloudfront-update]
-            - notify:
-                  context: CICD ALERT
-                  requires: [cleanup]
+            # - notify:
+            #       context: CICD ALERT
+            #       requires: [cleanup]
