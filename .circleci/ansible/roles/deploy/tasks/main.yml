@@ -1,34 +1,82 @@
+# ---
+# - name: "show remote environment"
+#   shell: env
+
+# - name: "copy backend binaries"
+#   become: yes
+#   synchronize:
+#       src: ../../backend/dist
+#       dest: /home/ubuntu/uda_app
+#       recursive: true
+
+# - name: "copy node_modules"
+#   become: yes
+#   synchronize:
+#       src: ../../backend/node_modules
+#       dest: /home/ubuntu/uda_app
+#       recursive: true
+
+# ############
+# - name: extract artifact
+#   become: true
+#   unarchive:
+#       src: files/artifact.tar.gz
+#       dest: .
+# ##############
+
+# - name: "delete anything that might already be running"
+#   become: true
+#   command: pm2 delete all
+#   ignore_errors: true
+
+# - name: "start server"
+#   become: true
+#   command: pm2 start -f ./main.js
+#   args:
+#       chdir: /home/ubuntu/uda_app/dist
+#   environment:
+#       - NODE_ENV: production
+#       - ENVIRONMENT: production
+#       - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
+#       - TYPEORM_MIGRATIONS_DIR: "./migrations"
+#       - TYPEORM_MIGRATIONS: "./migrations/*.js"
+#       - TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
+#       - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
+#       - TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
+#       - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
+#       - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
+#       - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+
 ---
-- name: "show remote environment"
-  shell: env
-
-- name: "copy backend binaries"
+- name: "update apt packages."
   become: yes
-  synchronize:
-      src: ../../backend/dist
-      dest: /home/ubuntu/uda_app
-      recursive: true
+  apt:
+      update_cache: yes
 
-- name: "copy node_modules"
+- name: "upgrade packages"
   become: yes
-  synchronize:
-      src: ../../backend/node_modules
-      dest: /home/ubuntu/uda_app
-      recursive: true
+  apt:
+      upgrade: yes
 
-############
-- name: extract artifact
-  become: true
-  unarchive:
-      src: files/artifact.tar.gz
-      dest: .
-##############
- 
+- name: remove dependencies that are no longer required
+  become: yes
+  apt:
+      autoremove: yes
 
-- name: "delete anything that might already be running"
-  become: true
-  command: pm2 delete all
-  ignore_errors: true
+- name: "install dependencies."
+  become: yes
+  apt:
+      name: ["nodejs", "npm"]
+      state: latest
+      update_cache: yes
+
+- name: "install pm2"
+  become: yes
+  npm:
+      name: pm2
+      global: yes
+      production: yes
+      state: present
 
 - name: "start server"
   become: true
@@ -36,14 +84,13 @@
   args:
       chdir: /home/ubuntu/uda_app/dist
   environment:
-      - NODE_ENV: production
-      - ENVIRONMENT: production
-      - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
-      - TYPEORM_MIGRATIONS_DIR: "./migrations"
-      - TYPEORM_MIGRATIONS: "./migrations/*.js"
-      - TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
-      - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
-      - TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
-      - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
-      - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
-      - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+      ENVIRONMENT: production
+      TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
+      TYPEORM_MIGRATIONS_DIR: "./migrations"
+      TYPEORM_MIGRATIONS: "./migrations/*.js"
+      TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
+      TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
+      TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
+      TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
+      TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
+      TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
