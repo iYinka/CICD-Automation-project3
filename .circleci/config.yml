@@ -217,6 +217,9 @@ jobs:
             - attach_workspace:
                   at: .
             - run:
+                  name: View content of inventory.txt
+                  command: cat .circleci/ansible/inventory.txt
+            - run:
                   name: Install Dependencies
                   command: |
                       apk add --update --no-cache tar gzip ansible
@@ -249,6 +252,8 @@ jobs:
             - image: cimg/node:18.4.0
         steps:
             - checkout
+            - attach_workspace:
+                  at: ~/.circleci/ansible/inventory.txt
             - run:
                   name: Install dependencies
                   command: |
@@ -258,8 +263,8 @@ jobs:
                       sudo ./aws/install
             - restore_cache:
                   keys: [backend-build]
-            - attach_workspace:
-                  at: .
+            # - attach_workspace:
+            #       at: .
             - run:
                   name: Run migrations
                   command: |
