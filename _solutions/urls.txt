@@ -1,3 +1,11 @@
+<<<<<<< HEAD
 Git Repo: https://github.com/iYinka/CICD-Automation-project3
 S3: http://udapeople-84b879c.s3-website-us-east-1.amazonaws.com/
 Cloudfront: https://d1y855r1zss9fh.cloudfront.net/
+=======
+URL01 Git Repo: https://github.com/iYinka/CICD-Automation-project3
+URL02 S3: http://udapeople-b643f67.s3-website-us-east-1.amazonaws.com/
+URL03 Cloudfront: https://d1y855r1zss9fh.cloudfront.net/
+URL04 Backend:
+URL05 Prometheus:
+>>>>>>> 8be04a5b55af5e5e0c422e2de0728412dec8012c
