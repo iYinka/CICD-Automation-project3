@@ -396,6 +396,10 @@ jobs:
             #####
             - restore_cache:
                   keys: [backend-build]
+            - persist_to_workspace:
+                  root: ~/
+                  paths:
+                      - project/artifact.tar.gz
             ########
             - run:
                   name: Deploy backend
@@ -458,10 +462,10 @@ jobs:
                       else
                       return 0
                       fi
-            # - destroy-environment:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-            # - revert-migrations:
-            #       workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - destroy-environment:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+            - revert-migrations:
+                  workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
     cloudfront-update:
         docker:
@@ -570,10 +574,10 @@ workflows:
                   requires: [run-migrations]
             - deploy-backend:
                   requires: [run-migrations]
-            # - smoke-test:
-            #       requires: [deploy-backend, deploy-frontend]
-            # - cloudfront-update:
-            #       requires: [smoke-test]
+            - smoke-test:
+                  requires: [deploy-backend, deploy-frontend]
+            - cloudfront-update:
+                  requires: [smoke-test]
             # - cleanup:
             #       requires: [cloudfront-update]
             # - notify:
