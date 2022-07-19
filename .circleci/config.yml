@@ -240,7 +240,7 @@ jobs:
                       ansible-playbook -i inventory.txt configure-server.yml
             - persist_to_workspace:
                   root: ~/
-                  paths: [project/backend]
+                  paths: [backend]
             - destroy-environment:
                   workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -259,7 +259,7 @@ jobs:
             - restore_cache:
                   keys: [backend-build]
             - attach_workspace:
-                  at: .
+                  at: ~/
             - run:
                   name: Run migrations
                   command: |
